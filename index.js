@@ -1,6 +1,3 @@
-/**
- * Don't change these constants!
- */
 const DODGER = document.getElementById('dodger')
 const GAME = document.getElementById('game')
 const GAME_HEIGHT = 400
@@ -59,7 +56,7 @@ function createRock(x) {
   rock.style.top = `${rockHeight}px`
 
   /* Append rock to GAME */
-  GAME.append(rock)
+  GAME.appendChild(rock)
 
   // Add the rock to ROCKS so that we can remove all rocks when there's a collision
   ROCKS.push(rock)
@@ -91,41 +88,32 @@ function createRock(x) {
   return rock
 }
 
-/**
- * End the game by clearing `gameInterval`,
- * removing all ROCKS from the DOM,
- * and removing the `moveDodger` event listener.
- * Finally, alert "YOU LOSE!" to the player.
- */
+ /* End the game by clearing `gameInterval`, removing all ROCKS from the DOM,
+ * and removing the `moveDodger` event listener. Finally, alert "YOU LOSE!" to the player. */
 function endGame() {
   alert("YOU LOSE!")
-  var a = document.getElementsByClassName('rock')
   clearInterval(gameInterval)
-  //Every time an element is removed, a new element becomes the first element
-  while(a[0]) {
-    a[0].parentNode.removeChild(a[0])
+  // Make sure all rocks are removed from the DOM
+  for(let i = 0; i < ROCKS.length; i++) {
+    ROCKS[i].remove()
   }
+
+  window.removeEventListener('keydown', moveDodger)
 }
 
 function moveDodger(e) {
-   /* This function should call `moveDodgerLeft()`
-   * if the left arrow is pressed and `moveDodgerRight()`
-   * if the right arrow is pressed.*/
-  document.addEventListener('keydown', function(e) {
-    if (e.which === LEFT_ARROW) {
-      moveDodgerLeft()
-    } else if(e.which === RIGHT_ARROW) {
-      moveDodgerRight()
-    }
-  })
+  if (e.which === LEFT_ARROW) {
+    moveDodgerLeft()
+    e.preventDefault()
+    e.stopPropagation()
+  } else if (e.which === RIGHT_ARROW) {
+    moveDodgerRight()
+    e.preventDefault()
+    e.stopPropagation()
+  }
 }
 
 function moveDodgerLeft() {
-  // implement me!
-  /**
-   * This function should move DODGER to the left
-   * (mabye 4 pixels?). Use window.requestAnimationFrame()!
-   */
   var left = positionToInteger(DODGER.style.left)
 
   function moveLeft() {
@@ -138,15 +126,14 @@ function moveDodgerLeft() {
 }
 
 function moveDodgerRight() {
-  /*This function should move DODGER to the right (maybe 4 pixels?). Use window.requestAnimationFrame()! */
-  const WIDTH = 40  //Figure out how to derive this without hard-coding
+  /*This function should move DODGER to the right using window.requestAnimationFrame() */
   var left = positionToInteger(DODGER.style.left)
 
   function moveRight() {
     dodger.style.left = `${left + SPEED}px`
   }
 
-  if (left + WIDTH < GAME_WIDTH) {
+  if ((left + 40) < GAME_WIDTH) {
     window.requestAnimationFrame(moveRight)
   }
 }
