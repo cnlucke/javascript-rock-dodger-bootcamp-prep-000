@@ -8,8 +8,6 @@ const ROCKS = []
 const START = document.getElementById('start')
 const SPEED = 10
 const ROCK_SPEED = 2
-const DODGER_WIDTH = DODGER.scrollWidth
-const DODGER_HEIGHT = DODGER.scrollHeight
 
 var gameInterval = null
 
